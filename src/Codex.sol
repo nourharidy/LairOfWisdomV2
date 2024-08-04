@@ -11,12 +11,6 @@ contract Codex {
     uint constant public statsDecay = 100;
     uint constant public healthPenalty = 100;
 
-    // mana costs
-    uint constant public acceptBreedingManaCost = 10000;
-
-    // loyalty costs
-    uint constant public acceptBreedingLoyaltyCost = 100;
-
     function feedEffects(
         Dragon dragon,
         address caller,
