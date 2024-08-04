@@ -27,14 +27,15 @@ contract Dragon {
     string public name;
     address[2] public parents;
     ILair public immutable lair;
+    uint public childrenCount;
     uint _health;
-    uint childrenCount;
     uint _hunger;
     uint _uncleanliness;
     uint _boredom;
     uint _sleepiness;
 
     uint public lastAttackTime = block.timestamp;
+    uint public lastBreedingTime = block.timestamp;
     uint public lastHealthUpdate = block.timestamp;
     uint public lastFeedTime = block.timestamp;
     uint public lastCleanTime = block.timestamp;
@@ -244,6 +245,7 @@ contract Dragon {
 
     function incrementChildrenCount() public onlyAuthorized updateStats {
         childrenCount++;
+        lastBreedingTime = block.timestamp;
     }
 
     function setLoyalty(address user, uint amount) public onlyAuthorized updateStats {
