@@ -135,21 +135,30 @@ contract Lair {
         mana.setMana(caller, _mana);
     }
 
+    function getAttackEffects(address caller, address attackerDragon, address targetDragon) internal view returns (uint, uint, uint, uint, uint, uint) {
+        Dragon attacker = Dragon(attackerDragon);
+        Dragon target = Dragon(targetDragon);
+        uint loyalty = attacker.loyalty(caller);
+        uint _mana = mana.mana(caller);
+        return codex.attackEffects(
+            attacker.hunger(),
+            attacker.uncleanliness(),
+            attacker.boredom(),
+            attacker.sleepiness(),
+            loyalty,
+            _mana,
+            target.health(),
+            attacker.damage()
+        );
+    }
+
     function onAttack(address caller, address target) public onlyDragon {
-        Dragon dragon = Dragon(msg.sender);
         Dragon _target = Dragon(target);
+        Dragon dragon = Dragon(msg.sender);
         require(isDragon[_target], "Lair: not a dragon");
         require(_target.health() > 0, "Lair: target is dead");
         require(!_target.invulnerable(), "Lair: target is invulnerable");
-        address _caller = caller; // to avoid stack too deep error
-        (uint hunger, uint uncleanliness, uint boredom, uint sleepiness, uint loyalty, uint _mana) = codex.attackEffects(
-            dragon.hunger(),
-            dragon.uncleanliness(),
-            dragon.boredom(),
-            dragon.sleepiness(),
-            dragon.loyalty(_caller),
-            mana.mana(_caller)
-        );
+        (uint hunger, uint uncleanliness, uint boredom, uint sleepiness, uint loyalty, uint _mana) = getAttackEffects(caller, msg.sender, target);
         dragon.setHunger(hunger);
         dragon.setUncleanliness(uncleanliness);
         dragon.setBoredom(boredom);

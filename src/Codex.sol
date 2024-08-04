@@ -99,7 +99,9 @@ contract Codex {
         uint boredom,
         uint sleepiness,
         uint loyalty,
-        uint mana
+        uint mana,
+        uint /*targetHealth*/,
+        uint /*damage*/
     ) public pure returns (uint, uint, uint, uint, uint, uint) {
         return (
             hunger + 20,
